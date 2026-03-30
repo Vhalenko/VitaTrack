@@ -9,11 +9,11 @@
 class BaseModel
 {
 
-    protected static $pdo;
+    protected $pdo;
 
     function __construct()
     {
-        if (!self::$pdo) {
+        if (!$this->pdo) {
 
             $host = $_ENV["DB_HOST"];
             $db = $_ENV["DB_NAME"];
@@ -27,7 +27,7 @@ class BaseModel
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             ];
 
-            self::$pdo = new PDO($dsn, $user, $pass, $options);
+            $this->pdo = new PDO($dsn, $user, $pass, $options);
         }
     }
 }

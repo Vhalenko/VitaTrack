@@ -1,5 +1,12 @@
 <?php
 
+require_once(__DIR__ . "/lib/helpers.php");
+setCORSHeaders();
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
 /**
  * Set env variables and enable error reporting in local environment
  */

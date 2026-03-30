@@ -1,6 +1,7 @@
 <?php
 
 require_once(__DIR__ . "/BaseModel.php");
+require_once(__DIR__ . "/../dto/UserDto.php");
 
 class UserModel extends BaseModel
 {
@@ -9,30 +10,16 @@ class UserModel extends BaseModel
         parent::__construct();
     }
 
-    public function getAll()
+    public function findByEmail($email)
     {
-        // demo, this would normally come from the database
-        return [
-            [
-                "id" => 1,
-                "email" => "foo@foo.com",
-                "username" => "foo_user"
-            ],
-            [
-                "id" => 2,
-                "email" => "bar@bar.com",
-                "username" => "bar_user"
-            ],
-        ];
-    }
+        $stmt = $this->pdo->prepare(
+            'SELECT id, name, email, password, daily_calorie_goal 
+             FROM users 
+             WHERE email = ?'
+        );
 
-    public function get($id)
-    {
-        // demo, this would normally come from the database
-        return             [
-            "id" => 2,
-            "email" => "bar@bar.com",
-            "username" => "bar_user"
-        ];
+        $stmt->execute([$email]);
+
+        return $stmt->fetch();
     }
 }
