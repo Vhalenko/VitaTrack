@@ -8,4 +8,9 @@ Route::add('/login', function () {
     $userController = new UserController();
     $result = $userController->login();
     echo json_encode($result);
-});
+}, 'post');
+
+Route::add('/register', function () {
+    $userController = new UserController();
+    $userController->register();
+}, 'post');

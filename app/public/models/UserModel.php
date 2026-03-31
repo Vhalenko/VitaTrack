@@ -22,4 +22,13 @@ class UserModel extends BaseModel
 
         return $stmt->fetch();
     }
+
+    public function create($name, $email, $hashedPassword)
+    {
+        $stmt = $this->pdo->prepare(
+            'INSERT INTO users (name, email, password) VALUES (?, ?, ?)'
+        );
+        $stmt->execute([$name, $email, $hashedPassword]); // no return here
+        return (int) $this->pdo->lastInsertId();          // only this
+    }
 }

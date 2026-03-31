@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 require_once(__DIR__ . "/lib/helpers.php");
 setCORSHeaders();
@@ -32,4 +34,13 @@ require_once(__DIR__ . "/routes/index.php");
 require_once(__DIR__ . "/routes/user.php");
 
 // Start the router, enabling handling requests
-Route::run();
+try {
+    Route::run();
+} catch (Throwable $e) {
+    http_response_code(500);
+    echo json_encode([
+        'error' => $e->getMessage(),
+        'file'  => $e->getFile(),
+        'line'  => $e->getLine(),
+    ]);
+}
