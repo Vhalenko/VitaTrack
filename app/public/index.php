@@ -33,6 +33,7 @@ require_once(__DIR__ . "/lib/Route.php");
 require_once(__DIR__ . "/routes/index.php");
 require_once(__DIR__ . "/routes/user.php");
 require_once(__DIR__ . "/routes/food.php");
+require_once(__DIR__ . "/routes/history.php");
 
 // Start the router, enabling handling requests
 try {
