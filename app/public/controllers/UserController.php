@@ -84,7 +84,7 @@ class UserController
 
         $token = generateToken($userId);
 
-        echo json_encode ([
+        echo json_encode([
             'message' => 'Account created successfully',
             'token'   => $token,
             'user'    => [
@@ -94,5 +94,109 @@ class UserController
                 'daily_calorie_goal' => 2000,
             ],
         ]);
+    }
+
+    public function getProfile(): array
+    {
+        $auth = requireAuth();
+
+        $user = $this->userModel->findById((int) $auth['user_id']);
+
+        if (!$user) jsonError('User not found', 404);
+
+        $bmr  = null;
+        $tdee = null;
+        if ($user['weight'] && $user['height'] && $user['age']) {
+            $bmr = 10 * $user['weight'] + 6.25 * $user['height'] - 5 * $user['age'] + 5;
+            $multipliers = [
+                'sedentary'   => 1.2,
+                'light'       => 1.375,
+                'moderate'    => 1.55,
+                'active'      => 1.725,
+                'very_active' => 1.9,
+            ];
+            $tdee = round($bmr * ($multipliers[$user['activity_level']] ?? 1.55));
+            $bmr  = round($bmr);
+        }
+
+        return ['user' => $user, 'bmr' => $bmr, 'tdee' => $tdee];
+    }
+
+    // PUT /profile  — update profile info
+    public function updateProfile(): array
+    {
+        $auth = requireAuth();
+        $body = getRequestBody();
+
+        $allowed = ['name', 'age', 'weight', 'height', 'activity_level', 'fitness_goal', 'daily_calorie_goal'];
+        $data    = [];
+
+        foreach ($allowed as $field) {
+            if (array_key_exists($field, $body)) {
+                $data[$field] = $body[$field];
+            }
+        }
+
+        // Validate
+        if (isset($data['name']) && strlen(trim($data['name'])) < 2) {
+            jsonError('Name must be at least 2 characters');
+        }
+        if (isset($data['age']) && ($data['age'] < 10 || $data['age'] > 120)) {
+            jsonError('Age must be between 10 and 120');
+        }
+        if (isset($data['weight']) && ($data['weight'] < 20 || $data['weight'] > 500)) {
+            jsonError('Weight must be between 20 and 500 kg');
+        }
+        if (isset($data['height']) && ($data['height'] < 50 || $data['height'] > 300)) {
+            jsonError('Height must be between 50 and 300 cm');
+        }
+        if (isset($data['daily_calorie_goal']) && ($data['daily_calorie_goal'] < 500 || $data['daily_calorie_goal'] > 10000)) {
+            jsonError('Calorie goal must be between 500 and 10000');
+        }
+
+        $activityLevels = ['sedentary', 'light', 'moderate', 'active', 'very_active'];
+        if (isset($data['activity_level']) && !in_array($data['activity_level'], $activityLevels)) {
+            jsonError('Invalid activity level');
+        }
+
+        $fitnessGoals = ['lose_weight', 'maintain', 'gain_muscle'];
+        if (isset($data['fitness_goal']) && !in_array($data['fitness_goal'], $fitnessGoals)) {
+            jsonError('Invalid fitness goal');
+        }
+
+        $userModel = new UserModel();
+        $userModel->updateProfile((int) $auth['user_id'], $data);
+
+        // Return updated user
+        return $this->getProfile();
+    }
+
+    // PUT /profile/password  — change password
+    public function updatePassword(): array
+    {
+        $auth = requireAuth();
+        $body = getRequestBody();
+
+        $currentPass = $body['current_password'] ?? '';
+        $newPass     = $body['new_password']     ?? '';
+
+        if (empty($currentPass) || empty($newPass)) {
+            jsonError('Current and new password are required');
+        }
+        if (strlen($newPass) < 8) {
+            jsonError('New password must be at least 8 characters');
+        }
+
+        $userModel = new UserModel();
+        $hash = $userModel->getPasswordHash((int) $auth['user_id']);
+
+        if (!$hash || !password_verify($currentPass, $hash)) {
+            jsonError('Current password is incorrect', 401);
+        }
+
+        $newHash = password_hash($newPass, PASSWORD_BCRYPT, ['cost' => 12]);
+        $userModel->updatePassword((int) $auth['user_id'], $newHash);
+
+        return ['message' => 'Password updated successfully'];
     }
 }
