@@ -34,6 +34,7 @@ require_once(__DIR__ . "/routes/index.php");
 require_once(__DIR__ . "/routes/user.php");
 require_once(__DIR__ . "/routes/food.php");
 require_once(__DIR__ . "/routes/history.php");
+require_once(__DIR__ . "/routes/nutrition.php");
 
 // Start the router, enabling handling requests
 try {
