@@ -12,7 +12,6 @@ class HistoryController
         $this->model = new HistoryModel();
     }
 
-    // GET /history/monthly?month=2024-01
     public function getMonthly(): array
     {
         $auth       = requireAuth();
@@ -30,7 +29,6 @@ class HistoryController
         ];
     }
 
-    // GET /history/day?date=2024-01-15
     public function getDayDetail(): array
     {
         $auth = requireAuth();
@@ -61,7 +59,6 @@ class HistoryController
         ];
     }
 
-    // GET /history/trend?days=30
     public function getTrend(): array
     {
         $auth = requireAuth();
@@ -72,7 +69,6 @@ class HistoryController
         return ['days' => $days, 'trend' => $trend];
     }
 
-    // GET /history/stats
     public function getStats(): array
     {
         $auth  = requireAuth();
@@ -80,7 +76,6 @@ class HistoryController
         return ['stats' => $stats];
     }
 
-    // POST /weight
     public function addWeight(): array
     {
         $auth = requireAuth();
@@ -101,7 +96,6 @@ class HistoryController
         return ['message' => 'Weight logged successfully'];
     }
 
-    // GET /weight?days=90
     public function getWeight(): array
     {
         $auth = requireAuth();
@@ -110,7 +104,6 @@ class HistoryController
         return ['logs' => $logs];
     }
 
-    // DELETE /weight?id=5
     public function deleteWeight(): array
     {
         $auth  = requireAuth();

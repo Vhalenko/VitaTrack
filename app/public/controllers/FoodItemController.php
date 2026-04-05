@@ -12,7 +12,6 @@ class FoodItemController
         $this->model = new FoodItemModel();
     }
 
-    // GET /foods/search?q=chicken
     public function search(): array
     {
         requireAuth();

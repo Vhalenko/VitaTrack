@@ -122,7 +122,6 @@ class UserController
         return ['user' => $user, 'bmr' => $bmr, 'tdee' => $tdee];
     }
 
-    // PUT /profile  — update profile info
     public function updateProfile(): array
     {
         $auth = requireAuth();
@@ -167,11 +166,9 @@ class UserController
         $userModel = new UserModel();
         $userModel->updateProfile((int) $auth['user_id'], $data);
 
-        // Return updated user
         return $this->getProfile();
     }
 
-    // PUT /profile/password  — change password
     public function updatePassword(): array
     {
         $auth = requireAuth();

@@ -1,6 +1,5 @@
 <?php
 
-// require the user controller so we can use it in this file
 require_once(__DIR__ . "/../controllers/UserController.php");
 require_once(__DIR__ . "/../lib/helpers.php");
 
@@ -20,13 +19,11 @@ Route::add('/profile', function () {
     return json_encode($controller->getProfile());
 }, 'get');
  
-// Update profile
 Route::add('/profile', function () {
     $controller = new UserController();
     return json_encode($controller->updateProfile());
 }, 'put');
  
-// Change password
 Route::add('/profile/password', function () {
     $controller = new UserController();
     return json_encode($controller->updatePassword());

@@ -9,7 +9,6 @@ class HistoryModel extends BaseModel
         parent::__construct();
     }
 
-    // Daily summaries for a given month (YYYY-MM)
     public function getMonthlySummary(int $userId, string $yearMonth): array
     {
         $stmt = $this->pdo->prepare(
@@ -30,7 +29,6 @@ class HistoryModel extends BaseModel
         return $stmt->fetchAll();
     }
 
-    // Logs for a specific day
     public function getDayDetail(int $userId, string $date): array
     {
         $stmt = $this->pdo->prepare(
@@ -49,7 +47,6 @@ class HistoryModel extends BaseModel
         return $stmt->fetchAll();
     }
 
-    // Last N days summary for trend chart
     public function getRecentTrend(int $userId, int $days = 30): array
     {
         $stmt = $this->pdo->prepare(
@@ -69,7 +66,6 @@ class HistoryModel extends BaseModel
         return $stmt->fetchAll();
     }
 
-    // Overall stats
     public function getStats(int $userId): array
     {
         $stmt = $this->pdo->prepare(
@@ -93,8 +89,6 @@ class HistoryModel extends BaseModel
         $stmt->execute([$userId, $userId]);
         return $stmt->fetch() ?: [];
     }
-
-    // ── Weight logs ───────────────────────────────────────────────────────────
 
     public function addWeightLog(int $userId, float $weight, string $date): int
     {

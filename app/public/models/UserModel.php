@@ -65,14 +65,12 @@ class UserModel extends BaseModel
         return $stmt->execute($values);
     }
 
-    // Update password
     public function updatePassword(int $userId, string $hashedPassword): bool
     {
         $stmt = $this->pdo->prepare('UPDATE users SET password = ? WHERE id = ?');
         return $stmt->execute([$hashedPassword, $userId]);
     }
 
-    // Get password hash for verification
     public function getPasswordHash(int $userId): string|false
     {
         $stmt = $this->pdo->prepare('SELECT password FROM users WHERE id = ?');

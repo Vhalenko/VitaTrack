@@ -12,7 +12,6 @@ class NutritionController
         $this->model = new NutritionModel();
     }
 
-    // GET /nutrition/day?date=2024-01-15
     public function getDayBreakdown(): array
     {
         $auth = requireAuth();
@@ -56,7 +55,6 @@ class NutritionController
         ];
     }
 
-    // GET /nutrition/averages?days=7
     public function getAverages(): array
     {
         $auth = requireAuth();
@@ -65,7 +63,6 @@ class NutritionController
         return ['days' => $days, 'averages' => $avgs];
     }
 
-    // GET /nutrition/top-foods
     public function getTopFoods(): array
     {
         $auth  = requireAuth();
@@ -73,7 +70,6 @@ class NutritionController
         return ['foods' => $foods];
     }
 
-    // GET /nutrition/macro-trend?days=14
     public function getMacroTrend(): array
     {
         $auth  = requireAuth();

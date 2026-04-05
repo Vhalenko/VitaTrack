@@ -15,7 +15,6 @@ class FoodLogController
         $this->foodModel = new FoodItemModel();
     }
 
-    // GET /food-logs?date=2024-01-15
     public function getLogs(): array
     {
         $auth = requireAuth();
@@ -46,7 +45,6 @@ class FoodLogController
         ];
     }
 
-    // POST /food-logs
     public function addLog(): array
     {
         $auth = requireAuth();
@@ -85,7 +83,6 @@ class FoodLogController
         return ['message' => 'Food logged successfully', 'log_id' => $logId];
     }
 
-    // DELETE /food-logs?id=5
     public function deleteLog(): array
     {
         $auth  = requireAuth();
@@ -100,7 +97,6 @@ class FoodLogController
         return ['message' => 'Log deleted'];
     }
 
-    // GET /food-logs/weekly
     public function getWeekly(): array
     {
         $auth    = requireAuth();
