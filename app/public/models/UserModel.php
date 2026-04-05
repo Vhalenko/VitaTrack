@@ -1,7 +1,6 @@
 <?php
 
 require_once(__DIR__ . "/BaseModel.php");
-require_once(__DIR__ . "/../dto/UserDto.php");
 
 class UserModel extends BaseModel
 {
